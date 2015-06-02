@@ -22,7 +22,7 @@ public class TestingClass {
 
 	
 	public void readSomeJSON() throws Exception {
-		URL url = new URL("http://prod.middleman.dk/api/webcam/json/synced&");
+		URL url = new URL("http://prod.middleman.dk/api/webcam/json/synced?type=webCam&syncVersion=1&");
 		HttpURLConnection connection = (HttpURLConnection)url.openConnection();
 		connection.setRequestMethod("GET");
 		connection.setRequestProperty("X-VD-APPVERSION", "500");
