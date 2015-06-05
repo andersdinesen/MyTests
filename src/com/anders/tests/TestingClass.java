@@ -1,6 +1,7 @@
 package com.anders.tests;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
@@ -10,6 +11,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 
 public class TestingClass {
@@ -30,12 +34,32 @@ public class TestingClass {
 		connection.connect();
 
 		InputStream stream = connection.getInputStream();
-		BufferedInputStream reader = new BufferedInputStream(stream);
+		//ufferedInputStream reader = new BufferedInputStream(stream);
 	
+		BufferedReader r = new BufferedReader(new InputStreamReader(stream));
+		StringBuilder total = new StringBuilder();
+		String line;
+		while ((line = r.readLine()) != null) {
+		    total.append(line);
+		}		
+		/*
 		StringWriter stringWriter = new StringWriter();
 		IOUtils.copy(stream, stringWriter, "UTF-8");
 		String result = stringWriter.toString();
+		*/
+		System.out.println("Result " + total.toString());
 		
-		System.out.println("Result " + result);
+		JSONParser parser = new JSONParser();
+		Object parsed = parser.parse(total.toString());
+		
+		JSONObject entities = (JSONObject)((JSONObject)parsed).get("entities");
+		
+		System.out.println("entities: " + entities.get("entities"));
+		JSONArray neworchanged = (JSONArray) entities.get("neworchanged");
+		for(Object element : neworchanged){
+			System.out.println("Element: " + element.toString());
+		}
+		
+		
 	}
 }
